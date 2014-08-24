@@ -1,4 +1,9 @@
-# Features #
+# ValueProvider #
+
+**ValueProvider** allow you to access to your object's property value without knowing the way the object have defined to do so.
+Public property, getter/setter? Let's `MutatorAndPropertyProvider` take care of this.
+
+## Features ##
 
 Can access to object's properties values:
 
@@ -8,9 +13,9 @@ Can access to object's properties values:
     - Works with magic `__call` (see below for examples and restriction)
 - With **doctrine** **`Metadata`** (see below for examples)
 
-# Examples #
+## Examples ##
 
-## Property Access ##
+### Property Access ###
 
 Class Person
 
@@ -34,11 +39,11 @@ Somewhere in your code
     echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
     //Output : "Hello John Doe"
 
-### Notice ###
+#### Notice ####
 
 The properties have to be public to be accessed.
 
-## Magic `__get` and `__set` properties access ##
+### Magic `__get` and `__set` properties access ###
 
 Class Person
 
@@ -85,11 +90,11 @@ Somewhere in your code
     echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
     //Output : "Hello John Doe"
 
-### Notice ###
+#### Notice ####
 
 The class rely on the `__isset` function to know if the property can be used with `__get` and `__set`
 
-## Mutator Access (getter/setter) ##
+### Mutator Access (getter/setter) ###
 
 Class Person
 
@@ -135,7 +140,7 @@ Somewhere in your code
     echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
     //Output : "Hello John Doe, you are unknown"
 
-### Notice ###
+#### Notice ####
 
 The mutator have to be public to be accessed.
 Getter are search in this order
@@ -143,7 +148,7 @@ Getter are search in this order
 - getMyProperty
 - isMyProperty
 
-## Magic `__call` mutator access ##
+### Magic `__call` mutator access ###
 
 Class Person
 
@@ -192,12 +197,12 @@ Somewhere in your code
     echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
     //Output : "Hello John Doe, you are unknown"
 
-### Notice ###
+#### Notice ####
 
 The class rely on the implementation of the `__call` function:
 the function MUST throw either `\BadFunctionCallException` or `\InvalidArgumentException` if the getter/setter doesn't exist
 
-## Doctrine Metadata ##
+### Doctrine Metadata ###
 
 Somewhere in your code
 
@@ -223,11 +228,11 @@ Somewhere in your code
     echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
     //Output : "Hello John Doe, you are unknown"
 
-### Notice ###
+#### Notice ####
 
 You have to set the Doctrine `EntityManager` to the `MetadataProvider
 
-## MutatorAndPropertyProvider ##
+### MutatorAndPropertyProvider ###
 
 This class try to access to the value with mutator or property.
 It first try the mutator, if not success then try the property.
