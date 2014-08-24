@@ -1,0 +1,12 @@
+<phpunit
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.1/phpunit.xsd"
+        bootstrap="vendor/bin/phpunit"
+        printerClass="\PHPUnit_TextUI_ResultPrinter"
+        >
+    <testsuites>
+        <testsuite name="MacFJA/ValueProvider">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

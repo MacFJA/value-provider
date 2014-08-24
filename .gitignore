@@ -1,0 +1,13 @@
+#### gitignore for JetBrains IDEs ####
+.idea/
+/*.iml
+*.ipr
+*.iws
+
+#### gitignore for Composer ####
+composer.phar
+vendor/
+
+#### gitignore for OS X ####
+.DS_Store
+._*
