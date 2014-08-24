@@ -1,15 +1,15 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: dev
- * Date: 23/08/2014
- * Time: 18:44
- * To change this template use File | Settings | File Templates.
- */
 
 namespace MacFJA\ValueProvider;
 
-
+/**
+ * Class PropertyProvider
+ *
+ * Use PropertyProvider to read/write object values.
+ *
+ * @author MacFJA
+ * @package MacFJA\ValueProvider
+ */
 class PropertyProvider implements ProviderInterface
 {
 

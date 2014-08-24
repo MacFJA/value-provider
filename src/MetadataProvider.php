@@ -1,17 +1,18 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: dev
- * Date: 17/08/14
- * Time: 17:20
- * To change this template use File | Settings | File Templates.
- */
 
 namespace MacFJA\ValueProvider;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
+/**
+ * Class MetadataProvider
+ *
+ * Use Doctrine Metadata to read/write object (Entity) values.
+ *
+ * @author MacFJA
+ * @package MacFJA\ValueProvider
+ */
 class MetadataProvider implements ProviderInterface
 {
     /**

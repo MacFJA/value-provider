@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: dev
- * Date: 23/08/2014
- * Time: 18:58
- * To change this template use File | Settings | File Templates.
- */
 
 namespace MacFJA\Tests\ValueProvider;
 

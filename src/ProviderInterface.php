@@ -1,15 +1,13 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: dev
- * Date: 17/08/14
- * Time: 17:09
- * To change this template use File | Settings | File Templates.
- */
 
 namespace MacFJA\ValueProvider;
 
-
+/**
+ * Class ProviderInterface
+ *
+ * @author MacFJA
+ * @package MacFJA\ValueProvider
+ */
 interface ProviderInterface
 {
     /**

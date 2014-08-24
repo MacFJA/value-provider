@@ -1,15 +1,20 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: dev
- * Date: 23/08/2014
- * Time: 18:44
- * To change this template use File | Settings | File Templates.
- */
 
 namespace MacFJA\ValueProvider;
 
-
+/**
+ * Class MutatorProvider
+ *
+ * Use Mutator (Getter and Setter) to read/write object values.<br/>
+ * Two getter are tried:
+ * <ul>
+ *     <li><b><tt>get</tt></b><tt>PropertyName</tt></li>
+ *     <li><b><tt>is</tt></b><tt>PropertyName</tt></li>
+ * </ul>
+ *
+ * @author MacFJA
+ * @package MacFJA\ValueProvider
+ */
 class MutatorProvider implements ProviderInterface
 {
 
