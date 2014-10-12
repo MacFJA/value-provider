@@ -1,6 +1,6 @@
 {
     "name": "macfja/value-provider",
-    "version": "0.0.1",
+    "version": "0.2.0",
     "description": "Get/Set object value with its getter/setter/property/metadata",
     "keywords": ["value","provider","mutator","getter","setter","metadata","doctrine","property","access"],
 

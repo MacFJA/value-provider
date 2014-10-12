@@ -8,6 +8,8 @@ namespace MacFJA\ValueProvider;
  * Use MutatorProvider and PropertyProvider to read/write object values.<br/>
  * First try to use MutatorProvider and, if fail, try to use PropertyProvider.
  *
+ * @deprecated 0.2.0 Prefer the provider MacFJA\ValueProvider\GuessProvider
+ * @see MacFJA\ValueProvider\GuessProvider
  * @author MacFJA
  * @package MacFJA\ValueProvider
  */

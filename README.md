@@ -1,7 +1,7 @@
 # ValueProvider #
 
 **ValueProvider** allow you to access to your object's property value without knowing the way the object have defined to do so.
-Public property, getter/setter? Let's `MutatorAndPropertyProvider` take care of this.
+Property, getter/setter? Let's `GuessProvider` take care of this.
 
 ## Features ##
 
@@ -9,6 +9,7 @@ Can access to object's properties values:
 
 - With direct property access (like `$myObject->myProperty`)
     - Works with magic `__get` and `__set` (see below for examples and restriction)
+    - Works with `protected` and `private` properties (see below for examples and restriction)
 - With mutator (getter/setter) (like `$myObject->getMyProperty()` and `$myObject->setMyProperty('new value')`)
     - Works with magic `__call` (see below for examples and restriction)
 - With **doctrine** **`Metadata`** (see below for examples)
@@ -42,6 +43,7 @@ Somewhere in your code
 #### Notice ####
 
 The properties have to be public to be accessed.
+(For protected and private properties, see ReflectorProvider)
 
 ### Magic `__get` and `__set` properties access ###
 
@@ -230,9 +232,48 @@ Somewhere in your code
 
 #### Notice ####
 
-You have to set the Doctrine `EntityManager` to the `MetadataProvider
+You have to set the Doctrine `EntityManager` to the `MetadataProvider`
 
-### MutatorAndPropertyProvider ###
+### ReflectorProvider ###
 
-This class try to access to the value with mutator or property.
-It first try the mutator, if not success then try the property.
+Class Person
+
+    class Person {
+        public $firstName = 'John';
+        protected $lastName = 'Doe';
+        private $known = true;
+    }
+
+Somewhere in your code
+
+    $jdoe = new Person();
+    $provider = new ReflectorProvider();
+
+    // ...
+
+    $provider->setValue($jdoe, 'firstName', 'John');
+    $provider->setValue($jdoe, 'lastName', 'Doe');
+    $provider->setValue($jdoe, 'known', false);
+
+    // ...
+
+    echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
+    echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
+    //Output : "Hello John Doe, you are unknown"
+
+#### Notice ####
+
+The class can access to private/protected property if you are running PHP 5.3 or newer
+
+### GuessProvider ###
+
+This class try to access to the value with mutator or property or reflection.
+It first try the mutator, if not success then try the property, and finish by trying with reflector.
+
+## Installation ##
+
+
+
+## Information ##
+
+This library respect PSR-1, PSR-2, PSR-4. It have PHPUnit tests for each provider.
