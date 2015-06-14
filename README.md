@@ -14,31 +14,43 @@ Can access to object's properties values:
     - Works with magic `__call` (see below for examples and restriction)
 - With **doctrine** **`Metadata`** (see below for examples)
 
+## Installation ##
+
+### Composer ###
+
+```
+composer require macfja/value-provider
+```
+
 ## Examples ##
 
 ### Property Access ###
 
 Class Person
 
-    class Person {
-        public $firstName = '';
-        public $lastName = '';
-    }
+```php
+class Person {
+    public $firstName = '';
+    public $lastName = '';
+}
+```
 
 Somewhere in your code
 
-    $jdoe = new Person();
-    $provider = new PropertyProvider();
+```php
+$jdoe = new Person();
+$provider = new PropertyProvider();
 
-    // ...
+// ...
 
-    $provider->setValue($jdoe, 'firstName', 'John');
-    $provider->setValue($jdoe, 'lastName', 'Doe');
+$provider->setValue($jdoe, 'firstName', 'John');
+$provider->setValue($jdoe, 'lastName', 'Doe');
 
-    // ...
+// ...
 
-    echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
-    //Output : "Hello John Doe"
+echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
+//Output : "Hello John Doe"
+```
 
 #### Notice ####
 
@@ -49,48 +61,52 @@ The properties have to be public to be accessed.
 
 Class Person
 
-    class Person {
-        private $_firstName = 'John';
-        private $_lastName = 'Doe';
+```php
+class Person {
+    private $_firstName = 'John';
+    private $_lastName = 'Doe';
 
-        function __get($name) {
-            if (in_array($name, array('firstName', 'lastName')) {
-                $propertyName = '_' . $name;
-                return $this->$propertyName;
-            }
-
-            throw new \BadFunctionCallException;
+    function __get($name) {
+        if (in_array($name, array('firstName', 'lastName')) {
+            $propertyName = '_' . $name;
+            return $this->$propertyName;
         }
 
-        function __set($name, $value) {
-            if (in_array($name, array('firstName', 'lastName')) {
-                $propertyName = '_' . $name;
-                $this->$propertyName = $value;
-                return;
-            }
-
-            throw new \BadFunctionCallException;
-        }
-
-        function __isset($name) {
-            return in_array($name, array('firstName', 'lastName');
-        }
+        throw new \BadFunctionCallException;
     }
+
+    function __set($name, $value) {
+        if (in_array($name, array('firstName', 'lastName')) {
+            $propertyName = '_' . $name;
+            $this->$propertyName = $value;
+            return;
+        }
+
+        throw new \BadFunctionCallException;
+    }
+
+    function __isset($name) {
+        return in_array($name, array('firstName', 'lastName');
+    }
+}
+```
 
 Somewhere in your code
 
-    $jdoe = new Person();
-    $provider = new PropertyProvider();
+```php
+$jdoe = new Person();
+$provider = new PropertyProvider();
 
-    // ...
+// ...
 
-    $provider->setValue($jdoe, 'firstName', 'John');
-    $provider->setValue($jdoe, 'lastName', 'Doe');
+$provider->setValue($jdoe, 'firstName', 'John');
+$provider->setValue($jdoe, 'lastName', 'Doe');
 
-    // ...
+// ...
 
-    echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
-    //Output : "Hello John Doe"
+echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
+//Output : "Hello John Doe"
+```
 
 #### Notice ####
 
@@ -100,47 +116,51 @@ The class rely on the `__isset` function to know if the property can be used wit
 
 Class Person
 
-    class Person {
-        private $_firstName = '';
-        private $_lastName = '';
-        private $_known = true;
+```php
+class Person {
+    private $_firstName = '';
+    private $_lastName = '';
+    private $_known = true;
 
-        public function getFirstName() {
-            return $this->_firstName;
-        }
-        public function setFirstName($value) {
-            $this->_firstName = $value;
-        }
-        public function getLastName() {
-            return $this->_lastName;
-        }
-        public function setLastName($value) {
-            $this->_firstName = $value;
-        }
-        public function isKnown() {
-            return $this->_known;
-        }
-        public function setKnown($flag) {
-            $this->_known = $flag;
-        }
+    public function getFirstName() {
+        return $this->_firstName;
     }
+    public function setFirstName($value) {
+        $this->_firstName = $value;
+    }
+    public function getLastName() {
+        return $this->_lastName;
+    }
+    public function setLastName($value) {
+        $this->_firstName = $value;
+    }
+    public function isKnown() {
+        return $this->_known;
+    }
+    public function setKnown($flag) {
+        $this->_known = $flag;
+    }
+}
+```
 
 Somewhere in your code
 
-    $jdoe = new Person();
-    $provider = new MutatorProvider();
+```php
+$jdoe = new Person();
+$provider = new MutatorProvider();
 
-    // ...
+// ...
 
-    $provider->setValue($jdoe, 'firstName', 'John');
-    $provider->setValue($jdoe, 'lastName', 'Doe');
-    $provider->setValue($jdoe, 'known', false);
+$provider->setValue($jdoe, 'firstName', 'John');
+$provider->setValue($jdoe, 'lastName', 'Doe');
+$provider->setValue($jdoe, 'known', false);
 
-    // ...
+// ...
 
-    echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
-    echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
-    //Output : "Hello John Doe, you are unknown"
+echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
+echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
+//Output : "Hello John Doe, you are unknown"
+```
 
 #### Notice ####
 
@@ -154,50 +174,54 @@ Getter are search in this order
 
 Class Person
 
-    class Person {
-        private $_firstName = 'John';
-        private $_lastName = 'Doe';
-        private $_known = true;
+```php
+class Person {
+    private $_firstName = 'John';
+    private $_lastName = 'Doe';
+    private $_known = true;
 
-        function __call($name, $arguments) {
-            switch ($name) {
-                case 'getFirstName':
-                    return $this->_firstName;
-                case 'getLastName':
-                    return $this->_lastName;
-                case 'isKnown':
-                    return $this->_known;
-                case 'setFirstName':
-                    $this->_firstName = $argument[0];
-                    return;
-                case 'setLastName':
-                    $this->_lastName = $argument[0];
-                    return;
-                case 'setKnown':
-                    $this->_known = $argument[0];
-                    return;
-            }
-
-            throw new \BadFunctionCallException;
+    function __call($name, $arguments) {
+        switch ($name) {
+            case 'getFirstName':
+                return $this->_firstName;
+            case 'getLastName':
+                return $this->_lastName;
+            case 'isKnown':
+                return $this->_known;
+            case 'setFirstName':
+                $this->_firstName = $argument[0];
+                return;
+            case 'setLastName':
+                $this->_lastName = $argument[0];
+                return;
+            case 'setKnown':
+                $this->_known = $argument[0];
+                return;
         }
+
+        throw new \BadFunctionCallException;
     }
+}
+```
 
 Somewhere in your code
 
-    $jdoe = new Person();
-    $provider = new MutatorProvider();
+```php
+$jdoe = new Person();
+$provider = new MutatorProvider();
 
-    // ...
+// ...
 
-    $provider->setValue($jdoe, 'firstName', 'John');
-    $provider->setValue($jdoe, 'lastName', 'Doe');
-    $provider->setValue($jdoe, 'known', false);
+$provider->setValue($jdoe, 'firstName', 'John');
+$provider->setValue($jdoe, 'lastName', 'Doe');
+$provider->setValue($jdoe, 'known', false);
 
-    // ...
+// ...
 
-    echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
-    echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
-    //Output : "Hello John Doe, you are unknown"
+echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
+echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
+//Output : "Hello John Doe, you are unknown"
+```
 
 #### Notice ####
 
@@ -208,27 +232,28 @@ the function MUST throw either `\BadFunctionCallException` or `\InvalidArgumentE
 
 Somewhere in your code
 
-    /** @type EntityManager $entityManager */
-    $class = 'MyClass';
-    $id = 1234;
+```php
+/** @type EntityManager $entityManager */
+$class = 'MyClass';
+$id = 1234;
 
-    $provider = new MetadataProvider();
-    MetadataProvider::setEntityManager($entityManager);
+$provider = new MetadataProvider();
+MetadataProvider::setEntityManager($entityManager);
 
-    jdoe = $entityManager->find($class, $id);
+jdoe = $entityManager->find($class, $id);
 
+// ...
 
-    // ...
+$provider->setValue($jdoe, 'firstName', 'John');
+$provider->setValue($jdoe, 'lastName', 'Doe');
+$provider->setValue($jdoe, 'known', false);
 
-    $provider->setValue($jdoe, 'firstName', 'John');
-    $provider->setValue($jdoe, 'lastName', 'Doe');
-    $provider->setValue($jdoe, 'known', false);
+// ...
 
-    // ...
-
-    echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
-    echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
-    //Output : "Hello John Doe, you are unknown"
+echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
+echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
+//Output : "Hello John Doe, you are unknown"
+```
 
 #### Notice ####
 
@@ -238,28 +263,32 @@ You have to set the Doctrine `EntityManager` to the `MetadataProvider`
 
 Class Person
 
-    class Person {
-        public $firstName = 'John';
-        protected $lastName = 'Doe';
-        private $known = true;
-    }
+```php
+class Person {
+    public $firstName = 'John';
+    protected $lastName = 'Doe';
+    private $known = true;
+}
+```
 
 Somewhere in your code
 
-    $jdoe = new Person();
-    $provider = new ReflectorProvider();
+```php
+$jdoe = new Person();
+$provider = new ReflectorProvider();
 
-    // ...
+// ...
 
-    $provider->setValue($jdoe, 'firstName', 'John');
-    $provider->setValue($jdoe, 'lastName', 'Doe');
-    $provider->setValue($jdoe, 'known', false);
+$provider->setValue($jdoe, 'firstName', 'John');
+$provider->setValue($jdoe, 'lastName', 'Doe');
+$provider->setValue($jdoe, 'known', false);
 
-    // ...
+// ...
 
-    echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
-    echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
-    //Output : "Hello John Doe, you are unknown"
+echo 'Hello ' . $provider->getValue($jdoe, 'firstName') . ' ' . $provider->getValue($jdoe, 'lastName');
+echo ', you are ' . ($provider->getValue($jdoe, 'known') ? '' : 'un') . 'known';
+//Output : "Hello John Doe, you are unknown"
+```
 
 #### Notice ####
 
@@ -269,10 +298,6 @@ The class can access to private/protected property if you are running PHP 5.3 or
 
 This class try to access to the value with mutator or property or reflection.
 It first try the mutator, if not success then try the property, and finish by trying with reflector.
-
-## Installation ##
-
-
 
 ## Information ##
 
