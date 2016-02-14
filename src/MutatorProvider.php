@@ -12,64 +12,105 @@ namespace MacFJA\ValueProvider;
  *     <li><b><tt>is</tt></b><tt>PropertyName</tt></li>
  * </ul>
  *
- * @author MacFJA
  * @package MacFJA\ValueProvider
+ * @author  MacFJA
+ * @license MIT
  */
 class MutatorProvider implements ProviderInterface
 {
 
     /**
-     * {@inheritdoc}
+     * Get a property value
+     *
+     * @param mixed  $object       The object to read
+     * @param string $propertyName The name of the property to read
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException if the property doesn't exist or can not be read
      */
     public static function getValue($object, $propertyName)
     {
         $possibleGetter = array('get' . ucfirst($propertyName), 'is' . ucfirst($propertyName));
 
+        /*
+         * This case handle both $URL, and $xPosition case.
+         * The getter for $xPosition is getxPosition because of the implementation of
+         * "java.beans.Introspector.decapitalize".
+         * {@see http://stackoverflow.com/a/16146215}
+         * {@see http://dertompson.com/2013/04/29/java-bean-getterssetters/}
+         */
+        if (substr($propertyName, 1, 1) !== strtolower(substr($propertyName, 1, 1))) {
+            $possibleGetter[] = 'get' . $propertyName;
+            $possibleGetter[] = 'is' . $propertyName;
+        }
+
         foreach ($possibleGetter as $getter) {
             if (method_exists($object, $getter) || is_callable(array($object, $getter), false)) {
                 try {
-                    return $object->$getter();
+                    return call_user_func(array($object, $getter));
+                    // @codingStandardsIgnoreLine
                 } catch (\BadFunctionCallException $e) {
                     //Do nothing and continue
-                }
-                catch (\InvalidArgumentException $e) {
+                    // @codingStandardsIgnoreLine
+                } catch (\InvalidArgumentException $e) {
                     //Do nothing and continue
                 }
             }
         }
 
         throw new \InvalidArgumentException(
-            'The class "' . get_class($object)
-            . '" does not have any getter for the property "' . $propertyName
-            . '" (tried getters: "' . implode('", "', $possibleGetter) . '")'
+            vsprintf(
+                'The class "%s" does not have any getter for the property "%s" (tried getters: "%s")',
+                array(get_class($object), $propertyName, implode('", "', $possibleGetter))
+            )
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Set the value of a property
+     *
+     * @param mixed  $object       The object to write
+     * @param string $propertyName The name of the property to set
+     * @param mixed  $value        The new value
+     *
+     * @return mixed The updated object
+     * @throws \InvalidArgumentException if the property doesn't exist or can not be write
      */
     public static function setValue(&$object, $propertyName, $value)
     {
         $possibleSetter = array('set' . ucfirst($propertyName));
 
+        /*
+         * This case handle both $URL, and $xPosition case.
+         * The setter for $xPosition is setxPosition because of the implementation of
+         * "java.beans.Introspector.decapitalize".
+         * {@see http://stackoverflow.com/a/16146215}
+         * {@see http://dertompson.com/2013/04/29/java-bean-getterssetters/}
+         */
+        if (substr($propertyName, 1, 1) !== strtolower(substr($propertyName, 1, 1))) {
+            $possibleSetter[] = 'set' . $propertyName;
+        }
+
         foreach ($possibleSetter as $setter) {
             if (method_exists($object, $setter) || is_callable(array($object, $setter), false)) {
                 try {
-                    $object->$setter($value);
-                    return $object;
+                    $return = call_user_func(array($object, $setter), $value);
+                    return $return;
+                    // @codingStandardsIgnoreLine
                 } catch (\BadFunctionCallException $e) {
                     //Do nothing and continue
-                }
-                catch (\InvalidArgumentException $e) {
+                    // @codingStandardsIgnoreLine
+                } catch (\InvalidArgumentException $e) {
                     //Do nothing and continue
                 }
             }
         }
 
         throw new \InvalidArgumentException(
-            'The class "' . get_class($object) . '"' .
-            ' does not have any setter for the property "' . $propertyName . '"' .
-            ' (tried setters: "' . implode('", "', $possibleSetter) . '")'
+            vsprintf(
+                'The class "%s" does not have any setter for the property "%s" (tried setters: "%s")',
+                array(get_class($object), $propertyName, implode('", "', $possibleSetter))
+            )
         );
     }
 }

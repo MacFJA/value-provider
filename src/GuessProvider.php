@@ -12,97 +12,56 @@ namespace MacFJA\ValueProvider;
  * <li>MacFJA\ValueProvider\PropertyProvider</li>
  * <li>MacFJA\ValueProvider\ReflectorProvider</li></ul>
  *
- * @author MacFJA
  * @package MacFJA\ValueProvider
+ * @author  MacFJA
+ * @license MIT
  */
-class GuessProvider implements ProviderInterface
+class GuessProvider extends ChainProvider
 {
-    const PROVIDER_LIST = 'MacFJA\ValueProvider\MutatorProvider,MacFJA\ValueProvider\PropertyProvider,MacFJA\ValueProvider\ReflectorProvider';
+    /**
+     * Get the ChainProvider instance
+     *
+     * @return void
+     */
+    protected static function ensureInitialize()
+    {
+        if (count(self::$providers) === 0) {
+            self::setProviders(array(
+                'MacFJA\ValueProvider\MutatorProvider',
+                'MacFJA\ValueProvider\PropertyProvider',
+                'MacFJA\ValueProvider\ReflectorProvider'
+            ));
+        }
+    }
 
     /**
-     * {@inheritdoc}
+     * Get a property value
+     *
+     * @param mixed  $object       The object to read
+     * @param string $propertyName The name of the property to read
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException if the property doesn't exist or can not be read
      */
     public static function getValue($object, $propertyName)
     {
-        $providers = explode(',', self::PROVIDER_LIST);
-        /** @var \InvalidArgumentException|null $error */
-        $error = null;
-
-        foreach ($providers as $provider) {
-            $error = null;
-            $value = self::tryGetValue($provider, $object, $propertyName, $error);
-            if (is_null($error)) {
-                return $value;
-            }
-        }
-
-        throw $error;
+        self::ensureInitialize();
+        return parent::getValue($object, $propertyName);
     }
 
     /**
-     * {@inheritdoc}
+     * Set the value of a property
+     *
+     * @param mixed  $object       The object to write
+     * @param string $propertyName The name of the property to set
+     * @param mixed  $value        The new value
+     *
+     * @return mixed The updated object
+     * @throws \InvalidArgumentException if the property doesn't exist or can not be write
      */
     public static function setValue(&$object, $propertyName, $value)
     {
-        $providers = explode(',', self::PROVIDER_LIST);
-        /** @var \InvalidArgumentException|null $error */
-        $error = null;
-
-        foreach ($providers as $provider) {
-            $error = null;
-            $result = self::trySetValue($provider, $object, $propertyName, $value, $error);
-            if (is_null($error)) {
-                return $result;
-            }
-        }
-
-        throw $error;
-    }
-
-    /**
-     * Try to get the value of an object property with a specific provider
-     *
-     * @param string|object $provider The provider class(name) to use
-     * @param object $object The object to read
-     * @param string $propertyName The name of the property to read
-     * @param \InvalidArgumentException|mixed $error If an error occurs, this variable will be set to the error triggered
-     * @return mixed|null The value of the object property, or <tt>null</tt> and an error in <tt>$error</tt> if an error occur.
-     */
-    protected static function tryGetValue($provider, $object, $propertyName, &$error)
-    {
-        if (is_object($provider)) {
-            $provider = get_class($provider);
-        }
-
-        try {
-            return call_user_func(array($provider, 'getValue'), $object, $propertyName);
-        } catch (\InvalidArgumentException $e) {
-            $error = $e;
-            return null;
-        }
-    }
-
-    /**
-     * Try to set the value of an object property with a specific provider
-     *
-     * @param string|object $provider The provider class(name) to use
-     * @param object $object The object to write
-     * @param string $propertyName The name of the property to write
-     * @param mixed $value The value to set
-     * @param \InvalidArgumentException|mixed $error If an error occurs, this variable will be set to the error triggered
-     * @return mixed|null The object, or <tt>null</tt> and an error in <tt>$error</tt> if an error occur.
-     */
-    protected static function trySetValue($provider, &$object, $propertyName, $value, &$error)
-    {
-        if (is_object($provider)) {
-            $provider = get_class($provider);
-        }
-
-        try {
-            return call_user_func(array($provider, 'setValue'), $object, $propertyName, $value);
-        } catch (\InvalidArgumentException $e) {
-            $error = $e;
-            return null;
-        }
+        self::ensureInitialize();
+        return parent::setValue($object, $propertyName, $value);
     }
 }

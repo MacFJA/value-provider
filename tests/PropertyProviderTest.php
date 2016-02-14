@@ -1,6 +1,6 @@
 <?php
 
-namespace MacFJA\Tests\ValueProvider;
+namespace MacFJA\ValueProvider\Test;
 
 use MacFJA\ValueProvider\PropertyProvider;
 

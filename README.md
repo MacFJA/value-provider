@@ -299,6 +299,11 @@ The class can access to private/protected property if you are running PHP 5.3 or
 This class try to access to the value with mutator or property or reflection.
 It first try the mutator, if not success then try the property, and finish by trying with reflector.
 
+### ChainProvider ###
+
+This class allow you to try through multiple Provider.
+For instance, the `GuessProvider` is based on the `ChainProvider`.
+
 ## Information ##
 
 This library respect PSR-1, PSR-2, PSR-4. It have PHPUnit tests for each provider.

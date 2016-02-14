@@ -1,6 +1,6 @@
 <?php
 
-namespace MacFJA\Tests\ValueProvider;
+namespace MacFJA\ValueProvider\Test;
 
 use MacFJA\ValueProvider\MutatorProvider;
 
@@ -54,6 +54,8 @@ class MutatorProviderTest extends \PHPUnit_Framework_TestCase {
                 array(new MutatorProviderTestMockObject(), 'value1', 'value1'),
                 array(new MutatorProviderTestMockObject(), 'value2', true),
                 array(new MutatorProviderTestMockObject(), 'value3', 'value3'),
+                array(new MutatorProviderTestMockObject(), 'xPosition', 7),
+                array(new MutatorProviderTestMockObject(), 'xPositive', true),
             );
         }
 
@@ -69,6 +71,7 @@ class MutatorProviderTest extends \PHPUnit_Framework_TestCase {
             return array(
                 array(new MutatorProviderTestMockObject(), 'value7', 'value7'),
                 array(new MutatorProviderTestMockObject(), 'value8', 'value8'),
+                array(new MutatorProviderTestMockObject(), 'xPosition', 3),
             );
         }
 
@@ -89,6 +92,9 @@ class MutatorProviderTest extends \PHPUnit_Framework_TestCase {
 class MutatorProviderTestMockObject {
     private $value7 = '';
     private $value8 = '';
+
+    private $xPosition = 7;
+    private $xPositive = true;
 
     public function getValue7() {
         return $this->value7;
@@ -111,6 +117,19 @@ class MutatorProviderTestMockObject {
     }
     private function setValue4() {
         throw new \Exception('Shoudn\'t be here'.__FILE__.':'.__LINE__);
+    }
+
+    public function getxPosition()
+    {
+        return $this->xPosition;
+    }
+    public function setxPosition($value)
+    {
+        $this->xPosition = $value;
+    }
+    public function isxPositive()
+    {
+        return $this->xPosition >= 0;
     }
 
     function __call($name, $arguments)

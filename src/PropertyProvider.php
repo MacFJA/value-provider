@@ -7,14 +7,21 @@ namespace MacFJA\ValueProvider;
  *
  * Use PropertyProvider to read/write object values.
  *
- * @author MacFJA
  * @package MacFJA\ValueProvider
+ * @author  MacFJA
+ * @license MIT
  */
 class PropertyProvider implements ProviderInterface
 {
 
     /**
-     * {@inheritdoc}
+     * Get a property value
+     *
+     * @param mixed  $object       The object to read
+     * @param string $propertyName The name of the property to read
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException if the property doesn't exist or can not be read
      */
     public static function getValue($object, $propertyName)
     {
@@ -23,22 +30,33 @@ class PropertyProvider implements ProviderInterface
         if (property_exists($object, $propertyName) || isset($object->$propertyName)) {
             try {
                 return $object->$propertyName;
+                // @codingStandardsIgnoreLine
             } catch (\BadFunctionCallException $e) {
                 //Do nothing and continue
-            }
-            catch (\InvalidArgumentException $e) {
+                // @codingStandardsIgnoreLine
+            } catch (\InvalidArgumentException $e) {
                 //Do nothing and continue
             }
         }
 
 
         throw new \InvalidArgumentException(
-            'The class "' . get_class($object) . '" does not have the property "' . $propertyName . '" or it\'s not readable'
+            vsprintf('The class "%s" does not have the property "%s" or it\'s not readable', array(
+                get_class($object),
+                $propertyName
+            ))
         );
     }
 
     /**
-     * {@inheritdoc}
+     * Set the value of a property
+     *
+     * @param mixed  $object       The object to write
+     * @param string $propertyName The name of the property to set
+     * @param mixed  $value        The new value
+     *
+     * @return mixed The updated object
+     * @throws \InvalidArgumentException if the property doesn't exist or can not be write
      */
     public static function setValue(&$object, $propertyName, $value)
     {
@@ -47,16 +65,20 @@ class PropertyProvider implements ProviderInterface
             try {
                 $object->$propertyName = $value;
                 return $object;
+                // @codingStandardsIgnoreLine
             } catch (\BadFunctionCallException $e) {
                 //Do nothing and continue
-            }
-            catch (\InvalidArgumentException $e) {
+                // @codingStandardsIgnoreLine
+            } catch (\InvalidArgumentException $e) {
                 //Do nothing and continue
             }
         }
 
         throw new \InvalidArgumentException(
-            'The class "' . get_class($object) . '" does not have the property "' . $propertyName . '" or it\'s not writable'
+            vsprintf('The class "%s" does not have the property "%s" or it\'s not writable', array(
+                get_class($object),
+                $propertyName
+            ))
         );
     }
 }
