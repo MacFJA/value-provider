@@ -11,7 +11,7 @@ namespace MacFJA\ValueProvider;
  * @author  MacFJA
  * @license MIT
  */
-class ChainProvider
+class ChainProvider implements ProviderInterface
 {
     /**
      * List of provider to use.
